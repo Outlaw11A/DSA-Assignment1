@@ -1,6 +1,6 @@
-#include "EuroEnglishConverter.h"
+#include "Euro.h"
 
-EuroEnglishConverter::EuroEnglishConverter()
+Euro::Euro()
 {
    this->ruleCount = 9;
    this->rulesFunctions[0] = ruleOne;
@@ -14,7 +14,7 @@ EuroEnglishConverter::EuroEnglishConverter()
    this->rulesFunctions[8] = ruleTen;
 }
 
-bool EuroEnglishConverter::loadFile(string file, list<char> &characterList)
+bool Euro::loadFile(string file, list<char> &characterList)
 {
    ifstream fileIn;
    char ch;
@@ -33,7 +33,7 @@ bool EuroEnglishConverter::loadFile(string file, list<char> &characterList)
    return true;
 }
 
-void EuroEnglishConverter::printList(const list<char> inputList)
+void Euro::printList(const list<char> inputList)
 {
    list<char>::const_iterator itr;
    for (itr = inputList.begin(); itr != inputList.end(); itr++) {
@@ -41,7 +41,7 @@ void EuroEnglishConverter::printList(const list<char> inputList)
    }
 }
 
-unsigned short EuroEnglishConverter::getHash(const list<char> &charList)
+unsigned short Euro::getHash(const list<char> &charList)
 {
    unsigned short shift, hash = 0;
    list<char>::const_iterator itr;
@@ -54,7 +54,7 @@ unsigned short EuroEnglishConverter::getHash(const list<char> &charList)
 }
 
 
-bool EuroEnglishConverter::ruleOne(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleOne(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    if (current == 'w') {
       current = 'v';
@@ -64,7 +64,7 @@ bool EuroEnglishConverter::ruleOne(list<char> &inputList, list<char>::iterator &
    return false;
 }
 
-bool EuroEnglishConverter::ruleTwo(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleTwo(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    if (!isPunctuation(current)) {
       return ListUtil::replaceFollowing(inputList, itr, current, current);
@@ -72,27 +72,27 @@ bool EuroEnglishConverter::ruleTwo(list<char> &inputList, list<char>::iterator &
    return false;
 }
 
-bool EuroEnglishConverter::ruleThree(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleThree(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    return ListUtil::replaceDoubleChar(current, inputList, itr, 'p', 'h', 'f');
 }
 
-bool EuroEnglishConverter::ruleFour(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleFour(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    return ListUtil::replaceDoubleChar(current, inputList, itr, 't', 'h', 'z');
 }
 
-bool EuroEnglishConverter::ruleFive(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleFive(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    return ListUtil::replaceDoubleChar(current, inputList, itr, 'o', 'u', 'u');
 }
 
-bool EuroEnglishConverter::ruleSix(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleSix(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    return ListUtil::replaceDoubleChar(current, inputList, itr, 'e', 'a', 'e');
 }
 
-bool EuroEnglishConverter::ruleSeven(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleSeven(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    if (current == 'c') {
       list<char>::iterator tempItr = itr;
@@ -113,7 +113,7 @@ bool EuroEnglishConverter::ruleSeven(list<char> &inputList, list<char>::iterator
    return false;
 }
 
-bool EuroEnglishConverter::ruleNine(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleNine(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    list<char>::iterator tempItr = itr;
    if (count >= 3 && current == 'e' && isPunctuation(*++tempItr)) {
@@ -124,7 +124,7 @@ bool EuroEnglishConverter::ruleNine(list<char> &inputList, list<char>::iterator 
    return false;
 }
 
-bool EuroEnglishConverter::ruleTen(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleTen(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    list<char>::iterator tempItr = itr;
    if (current == 'e' && *++tempItr == 'd' && isPunctuation(*++tempItr)) {
@@ -136,7 +136,7 @@ bool EuroEnglishConverter::ruleTen(list<char> &inputList, list<char>::iterator &
    return false;
 }
 
-void EuroEnglishConverter::processRules(list<char> &inputList)
+void Euro::processRules(list<char> &inputList)
 {
    // For each character
    list<char>::iterator itr;
@@ -160,6 +160,6 @@ void EuroEnglishConverter::processRules(list<char> &inputList)
    }
 }
 
-bool EuroEnglishConverter::isPunctuation(char character) {
+bool Euro::isPunctuation(char character) {
    return (ispunct(character) || character == ' ' || character == '\n');
 }

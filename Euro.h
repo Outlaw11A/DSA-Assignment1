@@ -9,7 +9,7 @@ using namespace std;
 
 typedef bool (*Rules) (list<char> &inList, list<char>::iterator &itr, char &current, int &count);
 
-class EuroEnglishConverter
+class Euro
 {
 
 private:
@@ -18,7 +18,7 @@ private:
 
 public:
 
-   EuroEnglishConverter();
+   Euro();
 
    // Load the contents of the file
    bool loadFile(string file, list<char> &characterList);

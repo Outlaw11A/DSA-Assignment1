@@ -1,35 +1,35 @@
 #include "ListUtil.h"
 
-void ListUtil::replaceChar(list<char> &inputList, list<char>::iterator &itr, char replacement)
+void ListUtil::replaceChar(list<char> &inList, list<char>::iterator &itr, char replacement)
 {
    if (isupper(*itr)) {
       replacement = (char)toupper(replacement);
    }
-   inputList.insert(itr, replacement);
-   inputList.erase(itr);
+   inList.insert(itr, replacement);
+   inList.erase(itr);
 }
 
-bool ListUtil::replaceFollowing(list<char> &inputList, list<char>::iterator &itr, char search, char replacement)
+bool ListUtil::replaceFollowing(list<char> &inList, list<char>::iterator &itr, char search, char replacement)
 {
    list<char>::iterator tempItr = itr;
    if (*++tempItr == search) {
-      replaceChar(inputList, itr, replacement);
-      eraseNext(inputList, itr);
+      replaceChar(inList, itr, replacement);
+      eraseNext(inList, itr);
       return true;
    }
    return false;
 }
 
-void ListUtil::eraseNext(list<char> &inputList, list<char>::iterator &itr)
+void ListUtil::eraseNext(list<char> &inList, list<char>::iterator &itr)
 {
-   inputList.erase(++itr);
+   inList.erase(++itr);
    --itr;
 }
 
-bool ListUtil::replaceDoubleChar(char &inputChar, list<char> &inputList, list <char>::iterator &itr, char indexChar, char followingChar, char replacementChar)
+bool ListUtil::replaceDoubleChar(char &inputChar, list<char> &inList, list <char>::iterator &itr, char indexChar, char followingChar, char replacementChar)
 {
    if (inputChar == indexChar) {
-      bool result = replaceFollowing(inputList, itr, followingChar, replacementChar);
+      bool result = replaceFollowing(inList, itr, followingChar, replacementChar);
       if (result) {
          inputChar = replacementChar;
       }
