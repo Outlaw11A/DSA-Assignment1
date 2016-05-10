@@ -9,7 +9,7 @@ EuroEnglishConverter::EuroEnglishConverter()
    this->rulesFunctions[3] = ruleFour;
    this->rulesFunctions[4] = ruleFive;
    this->rulesFunctions[5] = ruleSix;
-   this->rulesFunctions[6] = ruleSevenEight;
+   this->rulesFunctions[6] = ruleSeven;
    this->rulesFunctions[7] = ruleNine;
    this->rulesFunctions[8] = ruleTen;
 }
@@ -54,57 +54,57 @@ unsigned short EuroEnglishConverter::getHash(const list<char> &charList)
 }
 
 
-bool EuroEnglishConverter::ruleOne(list<char> &inputList, list<char>::iterator &itr, char &currentChar, int &counter)
+bool EuroEnglishConverter::ruleOne(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
-   if (currentChar == 'w') {
-      currentChar = 'v';
+   if (current == 'w') {
+      current = 'v';
       ListUtil::replaceChar(inputList, itr, 'v');
       return true;
    }
    return false;
 }
 
-bool EuroEnglishConverter::ruleTwo(list<char> &inputList, list<char>::iterator &itr, char &currentChar, int &counter)
+bool EuroEnglishConverter::ruleTwo(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
-   if (!isPunctuation(currentChar)) {
-      return ListUtil::replaceFollowing(inputList, itr, currentChar, currentChar);
+   if (!isPunctuation(current)) {
+      return ListUtil::replaceFollowing(inputList, itr, current, current);
    }
    return false;
 }
 
-bool EuroEnglishConverter::ruleThree(list<char> &inputList, list<char>::iterator &itr, char &currentChar, int &counter)
+bool EuroEnglishConverter::ruleThree(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
-   return ListUtil::replaceDoubleChar(currentChar, inputList, itr, 'p', 'h', 'f');
+   return ListUtil::replaceDoubleChar(current, inputList, itr, 'p', 'h', 'f');
 }
 
-bool EuroEnglishConverter::ruleFour(list<char> &inputList, list<char>::iterator &itr, char &currentChar, int &counter)
+bool EuroEnglishConverter::ruleFour(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
-   return ListUtil::replaceDoubleChar(currentChar, inputList, itr, 't', 'h', 'z');
+   return ListUtil::replaceDoubleChar(current, inputList, itr, 't', 'h', 'z');
 }
 
-bool EuroEnglishConverter::ruleFive(list<char> &inputList, list<char>::iterator &itr, char &currentChar, int &counter)
+bool EuroEnglishConverter::ruleFive(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
-   return ListUtil::replaceDoubleChar(currentChar, inputList, itr, 'o', 'u', 'u');
+   return ListUtil::replaceDoubleChar(current, inputList, itr, 'o', 'u', 'u');
 }
 
-bool EuroEnglishConverter::ruleSix(list<char> &inputList, list<char>::iterator &itr, char &currentChar, int &counter)
+bool EuroEnglishConverter::ruleSix(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
-   return ListUtil::replaceDoubleChar(currentChar, inputList, itr, 'e', 'a', 'e');
+   return ListUtil::replaceDoubleChar(current, inputList, itr, 'e', 'a', 'e');
 }
 
-bool EuroEnglishConverter::ruleSevenEight(list<char> &inputList, list<char>::iterator &itr, char &currentChar, int &counter)
+bool EuroEnglishConverter::ruleSeven(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
-   if (currentChar == 'c') {
+   if (current == 'c') {
       list<char>::iterator tempItr = itr;
       switch (*++tempItr) {
          case 'e':
          case 'i':
          case 'y':
-            currentChar = 's';
+            current = 's';
             ListUtil::replaceChar(inputList, itr, 's');
             break;
          default:
-            currentChar = 'k';
+            current = 'k';
             ListUtil::replaceChar(inputList, itr, 'k');
             break;
       }
@@ -113,22 +113,22 @@ bool EuroEnglishConverter::ruleSevenEight(list<char> &inputList, list<char>::ite
    return false;
 }
 
-bool EuroEnglishConverter::ruleNine(list<char> &inputList, list<char>::iterator &itr, char &currentChar, int &counter)
+bool EuroEnglishConverter::ruleNine(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    list<char>::iterator tempItr = itr;
-   if (counter >= 3 && currentChar == 'e' && isPunctuation(*++tempItr)) {
+   if (count >= 3 && current == 'e' && isPunctuation(*++tempItr)) {
       inputList.erase(itr);
-      counter = 0;
+      count = 0;
       return true;
    }
    return false;
 }
 
-bool EuroEnglishConverter::ruleTen(list<char> &inputList, list<char>::iterator &itr, char &currentChar, int &counter)
+bool EuroEnglishConverter::ruleTen(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    list<char>::iterator tempItr = itr;
-   if (currentChar == 'e' && *++tempItr == 'd' && isPunctuation(*++tempItr)) {
-      currentChar = 'd';
+   if (current == 'e' && *++tempItr == 'd' && isPunctuation(*++tempItr)) {
+      current = 'd';
       ListUtil::replaceChar(inputList, itr, 'd');
       ListUtil::eraseNext(inputList, itr);
       return true;
@@ -140,22 +140,22 @@ void EuroEnglishConverter::processRules(list<char> &inputList)
 {
    // For each character
    list<char>::iterator itr;
-   int counter = 0;
+   int count = 0;
    for (itr = inputList.begin(); itr != inputList.end(); itr++) {
       bool successfulRule;
-      char currentChar = (char) tolower(*itr);
-      if (!isPunctuation(currentChar)) {
+      char current = (char) tolower(*itr);
+      if (!isPunctuation(current)) {
          do {
             successfulRule = false;
             for (int i = 0; i < this->ruleCount; i++) {
-               if (this->rulesFunctions[i](inputList, itr, currentChar, counter)) {
+               if (this->rulesFunctions[i](inputList, itr, current, count)) {
                   successfulRule = true;
                }
             }
          } while (successfulRule);
-         counter++;
+         count++;
       } else {
-         counter = 0;
+         count = 0;
       }
    }
 }
