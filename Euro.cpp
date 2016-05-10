@@ -74,29 +74,30 @@ bool Euro::ruleTwo(list<char> &inputList, list<char>::iterator &itr, char &curre
 
 bool Euro::ruleThree(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
-   return ListUtil::replaceDoubleChar(current, inputList, itr, 'p', 'h', 'f');
+   return ListUtil::replaceDouble(current, inputList, itr, 'p', 'h', 'f');
 }
 
 bool Euro::ruleFour(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
-   return ListUtil::replaceDoubleChar(current, inputList, itr, 't', 'h', 'z');
+   return ListUtil::replaceDouble(current, inputList, itr, 't', 'h', 'z');
 }
 
 bool Euro::ruleFive(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
-   return ListUtil::replaceDoubleChar(current, inputList, itr, 'o', 'u', 'u');
+   return ListUtil::replaceDouble(current, inputList, itr, 'o', 'u', 'u');
 }
 
 bool Euro::ruleSix(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
-   return ListUtil::replaceDoubleChar(current, inputList, itr, 'e', 'a', 'e');
+   return ListUtil::replaceDouble(current, inputList, itr, 'e', 'a', 'e');
 }
 
 bool Euro::ruleSeven(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    if (current == 'c') {
       list<char>::iterator tempItr = itr;
-      switch (*++tempItr) {
+      ++tempItr;
+      switch (*tempItr) {
          case 'e':
          case 'i':
          case 'y':
@@ -116,7 +117,8 @@ bool Euro::ruleSeven(list<char> &inputList, list<char>::iterator &itr, char &cur
 bool Euro::ruleNine(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    list<char>::iterator tempItr = itr;
-   if (count >= 3 && current == 'e' && isPunctuation(*++tempItr)) {
+   ++tempItr;
+   if (count >= 3 && current == 'e' && isPunctuation(*tempItr)) {
       inputList.erase(itr);
       count = 0;
       return true;
@@ -127,7 +129,8 @@ bool Euro::ruleNine(list<char> &inputList, list<char>::iterator &itr, char &curr
 bool Euro::ruleTen(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
 {
    list<char>::iterator tempItr = itr;
-   if (current == 'e' && *++tempItr == 'd' && isPunctuation(*++tempItr)) {
+   ++tempItr;
+   if (current == 'e' && *tempItr == 'd' && isPunctuation(*tempItr)) {
       current = 'd';
       ListUtil::replaceChar(inputList, itr, 'd');
       ListUtil::eraseNext(inputList, itr);

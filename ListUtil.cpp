@@ -9,10 +9,12 @@ void ListUtil::replaceChar(list<char> &inList, list<char>::iterator &itr, char r
    inList.erase(itr);
 }
 
-bool ListUtil::replaceFollowing(list<char> &inList, list<char>::iterator &itr, char search, char replacement)
+bool ListUtil::replaceFollowing(list<char> &inList, list<char>::iterator &itr, char search,
+                                 char replacement)
 {
    list<char>::iterator tempItr = itr;
-   if (*++tempItr == search) {
+   ++tempItr;
+   if (*tempItr == search) {
       replaceChar(inList, itr, replacement);
       eraseNext(inList, itr);
       return true;
@@ -22,16 +24,18 @@ bool ListUtil::replaceFollowing(list<char> &inList, list<char>::iterator &itr, c
 
 void ListUtil::eraseNext(list<char> &inList, list<char>::iterator &itr)
 {
-   inList.erase(++itr);
+   ++itr;
+   inList.erase(itr);
    --itr;
 }
 
-bool ListUtil::replaceDoubleChar(char &inputChar, list<char> &inList, list <char>::iterator &itr, char indexChar, char followingChar, char replacementChar)
+bool ListUtil::replaceDouble(char &inChar, list<char> &inList, list<char>::iterator &itr,
+                              char index, char following, char replacement)
 {
-   if (inputChar == indexChar) {
-      bool result = replaceFollowing(inList, itr, followingChar, replacementChar);
+   if (inChar == index) {
+      bool result = replaceFollowing(inList, itr, following, replacement);
       if (result) {
-         inputChar = replacementChar;
+         inChar = replacement;
       }
       return result;
    }

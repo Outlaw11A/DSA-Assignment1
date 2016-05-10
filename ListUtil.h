@@ -12,11 +12,13 @@ public:
    static void replaceChar(list<char> &inList, list<char>::iterator &itr, char replacement);
 
    // Replaces the current char and the one following with the specified replacement
-   static bool replaceFollowing(list<char> &inList, list<char>::iterator &itr, char search, char replacement);
+   static bool replaceFollowing(list<char> &inList, list<char>::iterator &itr, char search,
+                                 char replacement);
 
    // Erases the next character
    static void eraseNext(list<char> &inList, list<char>::iterator &itr);
 
    // Replace two consecutive characters with a single character
-   static bool replaceDoubleChar(char &inputChar, list<char> &inList, list <char>::iterator &itr, char indexChar, char followingChar, char replacementChar);
+   static bool replaceDouble(char &inChar, list<char> &inList, list <char>::iterator &itr,
+                              char index, char following, char replacement);
 };
