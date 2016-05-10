@@ -2,16 +2,7 @@
 
 Euro::Euro()
 {
-   this->ruleCount = 9;
-   this->rulesFunctions[0] = ruleOne;
-   this->rulesFunctions[1] = ruleTwo;
-   this->rulesFunctions[2] = ruleThree;
-   this->rulesFunctions[3] = ruleFour;
-   this->rulesFunctions[4] = ruleFive;
-   this->rulesFunctions[5] = ruleSix;
-   this->rulesFunctions[6] = ruleSeven;
-   this->rulesFunctions[7] = ruleNine;
-   this->rulesFunctions[8] = ruleTen;
+   this->ruleCount = 10;
 }
 
 bool Euro::loadFile(string file, list<char> &characterList)
@@ -54,7 +45,7 @@ unsigned short Euro::getHash(const list<char> &charList)
 }
 
 
-bool Euro::ruleOne(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleOne(list<char> &inputList, list<char>::iterator &itr, char &current)
 {
    if (current == 'w') {
       current = 'v';
@@ -64,7 +55,7 @@ bool Euro::ruleOne(list<char> &inputList, list<char>::iterator &itr, char &curre
    return false;
 }
 
-bool Euro::ruleTwo(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleTwo(list<char> &inputList, list<char>::iterator &itr, char &current)
 {
    if (!isPunctuation(current)) {
       return ListUtil::replaceFollowing(inputList, itr, current, current);
@@ -72,27 +63,27 @@ bool Euro::ruleTwo(list<char> &inputList, list<char>::iterator &itr, char &curre
    return false;
 }
 
-bool Euro::ruleThree(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleThree(list<char> &inputList, list<char>::iterator &itr, char &current)
 {
    return ListUtil::replaceDouble(current, inputList, itr, 'p', 'h', 'f');
 }
 
-bool Euro::ruleFour(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleFour(list<char> &inputList, list<char>::iterator &itr, char &current)
 {
    return ListUtil::replaceDouble(current, inputList, itr, 't', 'h', 'z');
 }
 
-bool Euro::ruleFive(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleFive(list<char> &inputList, list<char>::iterator &itr, char &current)
 {
    return ListUtil::replaceDouble(current, inputList, itr, 'o', 'u', 'u');
 }
 
-bool Euro::ruleSix(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleSix(list<char> &inputList, list<char>::iterator &itr, char &current)
 {
    return ListUtil::replaceDouble(current, inputList, itr, 'e', 'a', 'e');
 }
 
-bool Euro::ruleSeven(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleSeven(list<char> &inputList, list<char>::iterator &itr, char &current)
 {
    if (current == 'c') {
       list<char>::iterator tempItr = itr;
@@ -126,15 +117,18 @@ bool Euro::ruleNine(list<char> &inputList, list<char>::iterator &itr, char &curr
    return false;
 }
 
-bool Euro::ruleTen(list<char> &inputList, list<char>::iterator &itr, char &current, int &count)
+bool Euro::ruleTen(list<char> &inputList, list<char>::iterator &itr, char &current)
 {
    list<char>::iterator tempItr = itr;
    ++tempItr;
-   if (current == 'e' && *tempItr == 'd' && isPunctuation(*tempItr)) {
-      current = 'd';
-      ListUtil::replaceChar(inputList, itr, 'd');
-      ListUtil::eraseNext(inputList, itr);
-      return true;
+   if (current == 'e' && *tempItr == 'd') {
+      ++tempItr;
+      if (isPunctuation(*tempItr)) {
+         current = 'd';
+         ListUtil::replaceChar(inputList, itr, 'd');
+         ListUtil::eraseNext(inputList, itr);
+         return true;
+      }
    }
    return false;
 }
@@ -150,8 +144,8 @@ void Euro::processRules(list<char> &inputList)
       if (!isPunctuation(current)) {
          do {
             successfulRule = false;
-            for (int i = 0; i < this->ruleCount; i++) {
-               if (this->rulesFunctions[i](inputList, itr, current, count)) {
+            for (int i = 1; i < this->ruleCount; i++) {
+               if (runRule(i, inputList, itr, current, count)) {
                   successfulRule = true;
                }
             }
@@ -165,4 +159,31 @@ void Euro::processRules(list<char> &inputList)
 
 bool Euro::isPunctuation(char character) {
    return (ispunct(character) || character == ' ' || character == '\n');
+}
+
+bool Euro::runRule(int rule, list<char> &inputList, list<char>::iterator &itr, char &current,
+                     int &count)
+{
+   switch(rule) {
+      case 1:
+         return ruleOne(inputList, itr, current);
+      case 2:
+         return ruleTwo(inputList, itr, current);
+      case 3:
+         return ruleThree(inputList, itr, current);
+      case 4:
+         return ruleFour(inputList, itr, current);
+      case 5:
+         return ruleFive(inputList, itr, current);
+      case 6:
+         return ruleSix(inputList, itr, current);
+      case 7:
+         return ruleSeven(inputList, itr, current);
+      case 8:
+         return ruleNine(inputList, itr, current, count);
+      case 9:
+         return ruleTen(inputList, itr, current);
+      default:
+         return false;
+   }
 }
