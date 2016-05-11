@@ -30,6 +30,7 @@ void Euro::printList(const list<char> inputList)
    for (itr = inputList.begin(); itr != inputList.end(); itr++) {
       cout << *itr;
    }
+   cout << "\n" << "Hash = " << getHash(inputList) << "\n";
 }
 
 unsigned short Euro::getHash(const list<char> &charList)
@@ -57,8 +58,11 @@ bool Euro::ruleOne(list<char> &inputList, list<char>::iterator &itr, char &curre
 
 bool Euro::ruleTwo(list<char> &inputList, list<char>::iterator &itr, char &current)
 {
-   if (!isPunctuation(current)) {
-      return ListUtil::replaceFollowing(inputList, itr, current, current);
+   list<char>::iterator tempItr = itr;
+   ++tempItr;
+   if (*tempItr == current) {
+      ListUtil::eraseNext(inputList, itr);
+      return true;
    }
    return false;
 }
@@ -110,7 +114,7 @@ bool Euro::ruleNine(list<char> &inputList, list<char>::iterator &itr, char &curr
    list<char>::iterator tempItr = itr;
    ++tempItr;
    if (count >= 3 && current == 'e' && isPunctuation(*tempItr)) {
-      inputList.erase(itr);
+      itr = inputList.erase(itr);
       count = 0;
       return true;
    }
@@ -141,7 +145,9 @@ void Euro::processRules(list<char> &inputList)
    for (itr = inputList.begin(); itr != inputList.end(); itr++) {
       bool successfulRule;
       char current = (char) tolower(*itr);
+      // Don't apply the rules to punctuation characters
       if (!isPunctuation(current)) {
+         // Apply each rule whilst they are successful
          do {
             successfulRule = false;
             for (int i = 1; i < this->ruleCount; i++) {
@@ -152,13 +158,14 @@ void Euro::processRules(list<char> &inputList)
          } while (successfulRule);
          count++;
       } else {
+         // Reset the character count
          count = 0;
       }
    }
 }
 
 bool Euro::isPunctuation(char character) {
-   return (ispunct(character) || character == ' ' || character == '\n');
+   return (ispunct(character) || isspace(character) || character == '\n');
 }
 
 bool Euro::runRule(int rule, list<char> &inputList, list<char>::iterator &itr, char &current,

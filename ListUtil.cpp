@@ -5,8 +5,8 @@ void ListUtil::replaceChar(list<char> &inList, list<char>::iterator &itr, char r
    if (isupper(*itr)) {
       replacement = (char)toupper(replacement);
    }
-   inList.insert(itr, replacement);
-   inList.erase(itr);
+   eraseChar(inList, itr);
+   itr = inList.insert(itr, replacement);
 }
 
 bool ListUtil::replaceFollowing(list<char> &inList, list<char>::iterator &itr, char search,
@@ -25,7 +25,7 @@ bool ListUtil::replaceFollowing(list<char> &inList, list<char>::iterator &itr, c
 void ListUtil::eraseNext(list<char> &inList, list<char>::iterator &itr)
 {
    ++itr;
-   inList.erase(itr);
+   eraseChar(inList, itr);
    --itr;
 }
 
@@ -40,4 +40,9 @@ bool ListUtil::replaceDouble(char &inChar, list<char> &inList, list<char>::itera
       return result;
    }
    return false;
+}
+
+void ListUtil::eraseChar(list<char> &inList, list<char>::iterator &itr)
+{
+   itr = inList.erase(itr);
 }

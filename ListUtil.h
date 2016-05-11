@@ -18,6 +18,9 @@ public:
    // Erases the next character
    static void eraseNext(list<char> &inList, list<char>::iterator &itr);
 
+   // Erases the specified character
+   static void eraseChar(list<char> &inList, list<char>::iterator &itr);
+
    // Replace two consecutive characters with a single character
    static bool replaceDouble(char &inChar, list<char> &inList, list <char>::iterator &itr,
                               char index, char following, char replacement);

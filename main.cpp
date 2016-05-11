@@ -17,11 +17,10 @@ int main(int argc, char*argv[])
       }
 
       converter.printList(originalList);
-      cout << "\n" << "Hash = " << converter.getHash(originalList) << "\n";
 
+      // run the rules on the list
       converter.processRules(originalList);
       converter.printList(originalList);
-      cout << "\n" << "Hash = " << converter.getHash(originalList) << "\n";
    } else {
       cout << "Error - Invalid command line arguments." << "\n";
    }
